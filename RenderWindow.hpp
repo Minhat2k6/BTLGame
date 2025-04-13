@@ -13,6 +13,9 @@ public:
 	void render(Entity& p_entity);
 	void render(SDL_Texture* tex);
 	void display();
+	
+	SDL_Renderer* getRenderer();
+    SDL_Window* getWindow();
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;

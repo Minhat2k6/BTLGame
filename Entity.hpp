@@ -24,6 +24,8 @@ public:
     bool touchingWall;
     
     bool isMoving = false;
+    
+    bool facingLeft = false;
 private:
 	float x, y;
 	SDL_Rect currentFrame;
@@ -31,5 +33,5 @@ private:
 	
 	int frameIndex;
     int frameDelay;
-    const int maxFrames = 4;
+    const int maxFrames = 6;
 };

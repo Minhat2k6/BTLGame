@@ -81,7 +81,13 @@ void Entity::update() {
         frameDelay++;
         if (frameDelay >= 10) {
             frameDelay = 0;
-            frameIndex = (frameIndex + 1) % maxFrames;
+            frameIndex++;
+            
+            int textureW = 0, textureH = 0;
+            SDL_QueryTexture(tex, NULL, NULL, &textureW, &textureH);
+            int maxFrameInImage = textureW / currentFrame.w;
+
+            frameIndex %= maxFrameInImage;
             currentFrame.x = frameIndex * currentFrame.w;
         }
     } else {

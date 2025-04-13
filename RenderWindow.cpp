@@ -45,7 +45,8 @@ void RenderWindow::render(Entity& p_entity)
     dst.y = static_cast<int>(p_entity.getY()) ;
 	dst.w = p_entity.getCurrentFrame().w *2 ;
 	dst.h = p_entity.getCurrentFrame().h *2 ;
-	SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
+	SDL_RendererFlip flip = p_entity.facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RenderCopyEx(renderer, p_entity.getTex(), &src, &dst, 0, nullptr, flip);
 }
 
 void RenderWindow::render(SDL_Texture* tex)
@@ -57,5 +58,12 @@ void RenderWindow::render(SDL_Texture* tex)
 void RenderWindow::display()
 {
 	SDL_RenderPresent(renderer);
+}
+SDL_Renderer* RenderWindow::getRenderer() {
+    return renderer;
+}
+
+SDL_Window* RenderWindow::getWindow() {
+    return window;
 }
 

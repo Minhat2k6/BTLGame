@@ -42,7 +42,7 @@ bool gameRunning = true;
             if (event.type == SDL_QUIT) gameRunning = false;
             
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE && !spacePressed) {
-                knight.jump(12); // l?c nh?y hi?n gi? du?c gi?m xu?ng cho h?p lý
+                knight.jump(10); // l?c nh?y hi?n gi? du?c gi?m xu?ng cho h?p lý
                 spacePressed = true;
             }
             
@@ -54,13 +54,15 @@ bool gameRunning = true;
         const Uint8* keystates = SDL_GetKeyboardState(NULL);
         float speed = 200.0f;
         if (keystates[SDL_SCANCODE_RIGHT]) { 
-            knight.move(speed * deltaTime, 0);
-            knight.isMoving = true;
-        }
-        if (keystates[SDL_SCANCODE_LEFT]) { 
-            knight.move(-speed * deltaTime, 0);
-            knight.isMoving = true;
-        }
+		    knight.move(speed * deltaTime, 0);
+		    knight.isMoving = true;
+		    knight.facingLeft = false;
+   } 
+       if (keystates[SDL_SCANCODE_LEFT]) { 
+		    knight.move(-speed * deltaTime, 0);
+		    knight.isMoving = true;
+		    knight.facingLeft = true;
+	}
         knight.applyGravity(30 * deltaTime);
         knight.update();
 
