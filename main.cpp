@@ -1,9 +1,11 @@
 #include <iostream>
+#include<vector>
 #include <SDL.h>
 #include<SDL2/SDL_image.h>
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
+#include "Enemy.hpp"
 
 using namespace std;
 
@@ -19,9 +21,18 @@ using namespace std;
  RenderWindow window0("GAME HAY", 1000, 600);
  SDL_Texture* knightTexture = window0.loadTexture("hulking_knight.png");
  SDL_Texture* backgroundTexture = window0.loadTexture("background.png");
+ SDL_Texture* slimeTexture = window0.loadTexture("slime.png");
+ SDL_Texture* heartTexture = window0.loadTexture("heart.png");
+
  
  Entity knight(100, 100, knightTexture);
+ vector<Enemy> enemies;
+    enemies.push_back(Enemy(-100, 530, slimeTexture, 32, 32));
+    enemies.push_back(Enemy(-340, 530, slimeTexture, 32, 32));
+    enemies.push_back(Enemy(-540, 530, slimeTexture, 32, 32));
+    enemies.push_back(Enemy(-860, 530, slimeTexture, 32, 32));
  
+ int hearts = 3; 
  
 bool gameRunning = true;
 
@@ -42,7 +53,7 @@ bool gameRunning = true;
             if (event.type == SDL_QUIT) gameRunning = false;
             
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE && !spacePressed) {
-                knight.jump(10); // l?c nh?y hi?n gi? du?c gi?m xu?ng cho h?p lý
+                knight.jump(11); // l?c nh?y hi?n gi? du?c gi?m xu?ng cho h?p lý
                 spacePressed = true;
             }
             
@@ -65,10 +76,45 @@ bool gameRunning = true;
 	}
         knight.applyGravity(30 * deltaTime);
         knight.update();
+        
+        for (auto& enemy : enemies) {
+            enemy.update(deltaTime);
+
+            SDL_Rect knightRect = {
+                static_cast<int>(knight.getX()),
+                static_cast<int>(knight.getY()),
+                knight.getCurrentFrame().w ,
+                knight.getCurrentFrame().h 
+            };
+            SDL_Rect enemyRect = {
+                static_cast<int>(enemy.getX()),
+                static_cast<int>(enemy.getY()),
+                enemy.getCurrentFrame().w * 2-36,
+                enemy.getCurrentFrame().h * 2-36
+            };
+
+            if (SDL_HasIntersection(&knightRect, &enemyRect)) {
+                if (hearts > 0) {
+                    hearts--;
+                    knight.move(40, 0); 
+                    SDL_Delay(100); 
+                }
+            }
+        }
 
         window0.clear();
         window0.render(backgroundTexture);
         window0.render(knight);
+        
+        for (Enemy& slime : enemies) {
+            slime.render(window0.getRenderer());
+        }
+
+        for (int i = 0; i < hearts; ++i) {
+            SDL_Rect heartDst = { 20 + i * 40, 20, 32, 32 };
+            SDL_RenderCopy(window0.getRenderer(), heartTexture, NULL, &heartDst);
+        }
+        
         window0.display();
     }
 
