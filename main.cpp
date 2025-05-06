@@ -33,6 +33,14 @@ using namespace std;
         return 1;
     }
     
+      Mix_Chunk* hurtSound = Mix_LoadWAV("dame.wav");
+    Mix_Chunk* explosionSound = Mix_LoadWAV("bomb.wav");
+      Mix_Music* gameOverMusic = Mix_LoadMUS("gameover.mp3");
+    
+    if (!hurtSound || !explosionSound||!gameOverMusic) {
+        cout << "Failed to load sound effects: " << Mix_GetError() << endl;
+    }
+    bool gameOverMusicPlaying = false;
     
     RenderWindow window0("GAME HAY", 1000, 600);
     SDL_Texture* knightTexture = window0.loadTexture("hulking_knight.png");
@@ -108,6 +116,10 @@ using namespace std;
                 
                 if (mouseX >= replayButtonRect.x && mouseX <= replayButtonRect.x + replayButtonRect.w &&
                     mouseY >= replayButtonRect.y && mouseY <= replayButtonRect.y + replayButtonRect.h) {
+                    if (gameOverMusicPlaying) {
+                        Mix_HaltMusic();
+                        gameOverMusicPlaying = false;
+                    }
                     gameOver = false;
                     hearts = 3;
                     score = 0;
@@ -178,10 +190,17 @@ using namespace std;
                     if (hearts > 0) {
                         hearts--;
                         knight.move(40, 0); 
+                        if (hurtSound) {
+                            Mix_PlayChannel(-1, hurtSound, 0);
+                        }
                         SDL_Delay(100); 
                         
                         if (hearts <= 0) {
                             gameOver = true;
+                            if (gameOverMusic && !gameOverMusicPlaying) {
+                                Mix_PlayMusic(gameOverMusic, -1); 
+                                gameOverMusicPlaying = true;
+                            }
                         }
                     }
                 }
@@ -210,12 +229,19 @@ using namespace std;
                 if (SDL_HasIntersection(&knightRect, &bombRect)) {
                     if (hearts > 0) {
                         hearts--;
+                        if (explosionSound) {
+                            Mix_PlayChannel(-1, explosionSound, 0);
+                        }
                         bombs.erase(bombs.begin() + i); 
                         i--; 
                         SDL_Delay(100);
                         
                         if (hearts <= 0) {
                             gameOver = true;
+                            if (gameOverMusic && !gameOverMusicPlaying) {
+                                Mix_PlayMusic(gameOverMusic, -1);
+                                gameOverMusicPlaying = true;
+                            }
                         }
                         continue;
                     }
@@ -323,6 +349,16 @@ using namespace std;
         window0.display();
     }
     
+    if (hurtSound) {
+        Mix_FreeChunk(hurtSound);
+    }
+    if (explosionSound) {
+        Mix_FreeChunk(explosionSound);
+    }
+    if (gameOverMusic) {
+        Mix_FreeMusic(gameOverMusic);
+    }
+    
     SDL_DestroyTexture(knightTexture);
     SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyTexture(slimeTexture);
@@ -336,6 +372,8 @@ using namespace std;
     window0.cleanUp();
     TTF_CloseFont(font);
     TTF_Quit();
+    Mix_CloseAudio();
+    Mix_Quit();
     SDL_Quit();
     return 0;
 }
