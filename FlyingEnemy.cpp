@@ -6,7 +6,7 @@ FlyingEnemy::FlyingEnemy(float x, float y, SDL_Texture* tex, SDL_Texture* bombTe
 {
 }
 
-// Thêm constructor th? hai phù h?p v?i cách g?i trong main
+
 FlyingEnemy::FlyingEnemy(float x, float y, SDL_Texture* tex, int frameW, int frameH)
     : Entity(x, y, tex, frameW, frameH), speedX(100.0f), minX(x - 150), maxX(x + 150),
       movingLeft(false), bombCooldown(0.0f), bombTexture(nullptr)

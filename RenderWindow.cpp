@@ -12,7 +12,7 @@ RenderWindow::RenderWindow(const char* p_title, int p_w, int p_h)
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
-SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)// hàm ki?u SDL_Texture
+SDL_Texture* RenderWindow::loadTexture(const char* p_filePath)
 {
 	SDL_Surface* surface = IMG_Load(p_filePath);
     
