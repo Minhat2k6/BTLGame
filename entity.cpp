@@ -67,11 +67,11 @@ void Entity::update() {
 		onGround = false;
 	}
 
-	if (x <= 0) {
+	if (x <= -40) {
         x = 0;
         touchingWall = true;
-    } else if (x + currentFrame.w * 2 >= 1000) { 
-        x = 1000 - currentFrame.w * 2;
+    } else if (x + currentFrame.w * 2 >= 1040) { 
+        x = 1040 - currentFrame.w * 2;
         touchingWall = true;
     } else {
         touchingWall = false;

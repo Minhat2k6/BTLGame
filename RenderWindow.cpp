@@ -51,7 +51,7 @@ void RenderWindow::render(Entity& p_entity)
 
 void RenderWindow::render(SDL_Texture* tex)
 {
-    SDL_RenderCopy(renderer, tex, NULL, NULL); // n?n full màn
+    SDL_RenderCopy(renderer, tex, NULL, NULL); 
 }
 
 

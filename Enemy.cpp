@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 Enemy::Enemy(float p_x, float p_y, SDL_Texture* p_tex, int frameW, int frameH)
-    : x(p_x), y(p_y), tex(p_tex), speed(50.0f), frameIndex(0), frameDelay(0)
+    : x(p_x), y(p_y), tex(p_tex), speed(40.0f), frameIndex(0), frameDelay(0)
 {
     currentFrame.x = 0;
     currentFrame.y = 0;
